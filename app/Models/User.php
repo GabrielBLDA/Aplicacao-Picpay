@@ -20,6 +20,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'cpf/cnpj',
+        'sn_lojista',
     ];
 
     /**
@@ -40,4 +42,20 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function balance()
+    {
+        return $this->hasOne(BalanceUser::class, 'user_id', 'id');
+    }
+
+    public function getAccountNumber()
+    {
+        try {
+            return $this->balance->account_number; 
+
+        } catch (\Throwable $th) {
+
+            return null;
+        }       
+    }
 }

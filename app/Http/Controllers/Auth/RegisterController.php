@@ -52,7 +52,8 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:4', 'confirmed'],
+            'cpf/cnpj' => ['required', 'string', 'max:11'],
         ]);
     }
 
@@ -64,10 +65,14 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $sn_lojista = request('sn_lojista') ? 1 : 0;
+
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'cpf/cnpj' => $data['cpf/cnpj'],
             'password' => Hash::make($data['password']),
+            'sn_lojista' =>  $sn_lojista,
         ]);
     }
 }
